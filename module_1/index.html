@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Event Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons (Optional) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #welcomeBanner {
+            background-color: #e3acac;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .caption {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .thumbnail {
+            width: 150px;
+            cursor: zoom-in;
+        }
+
+        .error-msg {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Community Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#registration">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section id="home">
+            <div id="welcomeBanner" class="text-center">
+                <h1>Welcome to Our Community Portal, <span class="fw-bold">Guest</span>!</h1>
+            </div>
+
+            <article class="row">
+                <div class="col-md-12">
+                    <h2>Community News</h2>
+                    <p>Welcome to our community portal! We're excited to bring you a variety of events this season. From educational workshops to fun social gatherings, there's something for everyone.</p>
+                    <p>Our summer concert series returns with local bands every Friday night in June. Don't miss the annual charity 5K run on July 8th - all proceeds go to local schools.</p>
+                    <p>New this year: We've added more family-friendly events and expanded our art exhibition to feature twice as many local artists. Registration is now open for all events!</p>
+                </div>
+            </article>
+
+            <div class="video-container mt-4">
+                <h2>Upcoming Event Preview</h2>
+                <video id="eventVideo" width="100%" controls oncanplay="videoReady()" class="rounded shadow">
+                    <source src="assets/vdo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p id="videoStatus">Loading video preview...</p>
+            </div>
+        </section>
+
+        <section id="events" class="mt-5">
+            <h2>Upcoming Events</h2>
+            <div id="eventList" class="row row-cols-1 row-cols-md-3 g-4"></div>
+
+            <h3 class="mt-4">Past Event Gallery</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <img src="https://reefguardian.org/wp-content/uploads/2021/05/pexels-leah-kelley-325521-2.jpg" alt="Annual Community Picnic" class="gallery-img">
+                    <p class="caption">Annual Community Picnic 2023</p>
+                </div>
+                <div class="col-md-4">
+                    <img src="https://images.livemint.com/img/2023/02/24/original/book_fair_1677231488890.jpg" alt="Book Fair" class="gallery-img">
+                    <p class="caption">Community Book Fair</p>
+                </div>
+                <div class="col-md-4">
+                    <img src="https://www.socialtables.com/wp-content/uploads/2016/10/iStock-540095978.jpg" alt="Charity Event" class="gallery-img">
+                    <p class="caption">Charity Fundraiser 2023</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="registration" class="mt-5">
+            <h2>Event Registration</h2>
+            <form id="registerForm" class="row g-3" onsubmit="return submitForm(event)">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Full Name:</label>
+                    <input type="text" id="name" name="name" class="form-control" required autofocus>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone:</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" onblur="validatePhone(this)">
+                    <span id="phoneError" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="eventDate" class="form-label">Event Date:</label>
+                    <input type="date" id="eventDate" name="eventDate" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="eventType" class="form-label">Event Type:</label>
+                    <select id="eventType" name="eventType" class="form-select" required onchange="showEventFee(this)">
+                        <option value="">Select an event</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="concert">Concert</option>
+                        <option value="sports">Sports Event</option>
+                        <option value="exhibition">Exhibition</option>
+                    </select>
+                    <span id="eventFee" class="form-text"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="message" class="form-label">Special Requests:</label>
+                    <textarea id="message" name="message" rows="4" class="form-control" onkeyup="countChars(this)"></textarea>
+                    <div id="charCount" class="form-text">0/200 characters</div>
+                </div>
+
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary me-2">Register</button>
+                    <button type="button" onclick="clearPreferences()" class="btn btn-secondary">Clear Preferences</button>
+                </div>
+                <div class="col-md-12">
+                    <output id="formOutput"></output>
+                </div>
+            </form>
+        </section>
+
+        <section id="geolocation" class="mt-5">
+            <h2>Find Events Near You</h2>
+            <button class="btn btn-info" onclick="findNearbyEvents()">Find Nearby Events</button>
+            <div id="locationInfo" class="mt-3"></div>
+            <div id="nearbyEvents"></div>
+        </section>
+
+        <section id="event-feedback" class="mt-5">
+            <h2>Event Feedback</h2>
+            <form id="feedbackForm">
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number:</label>
+                    <input type="text" id="phone" class="form-control" onblur="validatePhone()">
+                    <span id="phoneError" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="eventSelect" class="form-label">Select Event:</label>
+                    <select id="eventSelect" class="form-select" onchange="displayFee()">
+                        <option value="">--Choose an event--</option>
+                        <option value="100">Community Picnic - $100</option>
+                        <option value="50">Book Fair - $50</option>
+                        <option value="75">Charity Drive - $75</option>
+                    </select>
+                    <p id="eventFeeDisplay"></p>
+                </div>
+
+                <img src="https://reefguardian.org/wp-content/uploads/2021/05/pexels-leah-kelley-325521-2.jpg" alt="Sample Event" class="thumbnail" ondblclick="enlargeImage(this)">
+
+                <div class="mb-3 mt-3">
+                    <label for="feedback" class="form-label">Feedback:</label>
+                    <textarea id="feedback" class="form-control" rows="4" onkeyup="countCharacters()"></textarea>
+                    <p id="charCount">Characters: 0</p>
+                </div>
+
+                <button type="button" class="btn btn-success" onclick="submitFeedback()">Submit</button>
+            </form>
+        </section>
+
+        <section id="contact" class="mt-5">
+            <h2>Contact Us</h2>
+            <div class="bg-light p-3 rounded">
+                <p><strong>Community Center:</strong> no 47 chennai</p>
+                <p><strong>Phone:</strong> 0987654366</p>
+                <p><strong>Email:</strong> events@communityportal.org</p>
+                <p><strong>Office Hours:</strong> Mon-Fri, 9am-5pm</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center p-3 mt-5">
+        <p class="mb-1">&copy; 2025 Community Event Portal</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#" class="text-white">Privacy Policy</a>
+            <a href="#" class="text-white">Terms of Service</a>
+            <a href="#" class="text-white">Accessibility</a>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
